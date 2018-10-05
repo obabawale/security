@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="block_config_form" model="ir.ui.view">
+            <field name="name">limit_login.block.config.form</field>
+            <field name="model">limit_login.block.config</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="attempts"/>
+                            <field name="interval" widget="float_time"/>
+                            <field name="block_time" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="message_block"/>
+                            <field name="message_unblock"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="is_active"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="block_config_tree" model="ir.ui.view">
+            <field name="name">limit_login.block.config.tree</field>
+            <field name="model">limit_login.block.config</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="attempts"/>
+                    <field name="interval" widget="float_time"/>
+                    <field name="block_time" widget="float_time"/>
+                    <field name="message_block"/>
+                    <field name="message_unblock"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_config" model="ir.actions.act_window">
+            <field name="name">Block Users Configs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">limit_login.block.config</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <record id="block_users_tree" model="ir.ui.view">
+            <field name="name">limit_login.block.tree</field>
+            <field name="model">limit_login.block</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false">
+                    <field name="user_id"/>
+                    <field name="remaining_time"/>
+                    <field name="last_login_fail"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_block_users" model="ir.actions.act_window">
+            <field name="name">Block Users</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">limit_login.block</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+        </record>
+
+
+        <menuitem id="menu_block_login_users" name="Block Login Users" parent="base.menu_administration" sequence="0"/>
+        <menuitem id="menu_block_users" name="Block users" parent="menu_block_login_users" action="action_block_users" sequence="0"/>
+        <menuitem id="menu_config" name="Configs" parent="menu_block_login_users" action="action_config" sequence="1"/>
+
+
+        <!--Block Master Login Attempts-->
+        <record id="action_block_master" model="ir.actions.act_window">
+            <field name="name">Block Master Login</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">limit_login.block.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="menu_block_master" name="Master Login Attempts" parent="base.menu_administration" sequence="0"/>
+        <menuitem id="sub_menu_block_master" name="master_login_replace_me" parent="menu_block_master" sequence="0"
+                  action="action_block_master"/>
+    </data>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="limit_login_attempts.login" inherit_id="web.login">
+        <xpath expr="//form/p[hasclass('alert-danger')]" position="after">
+            <div id='unblock_message_container' style="display: none;" t-if="unblock_message">
+                <p class="alert alert-success" style="text-align: center;">
+                    <t t-esc="unblock_message"/>
+                </p>
+            </div>
+            <div id='remaining_time_container' t-if="remaining_time">
+                <input id='remaining_time_value' type="hidden" t-att-value="remaining_time"/>
+                <div id="countdown">
+                    <div class="remaining_time text-center" style="font-weight: bold; font-size: 21px; color:#337ab7;">
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
