@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="block_master_login_config">
+        <link rel="stylesheet" href="/limit_login_attempts/static/src/css/modal.css"/>
+        <div id="master_login_config" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Master Login Configs</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display:flex; flex-flow: row; justify-content: space-between;">
+                            <div id="current_attempts">
+                                <b>Current Attempts</b>
+                                <input class="value" type="number" t-att-value="count"/>
+                            </div>
+                            <div id="attempts_allowed">
+                                <b>Attempts Allowed</b>
+                                <input class="value" type="number" t-att-value="attempts"/>
+                            </div>
+                        </div>
+                        <div id="state" style="text-align: center;">
+                            <b>State</b>
+                            <p class="value"><t t-esc="state"/></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save_config" type="button" class="btn btn-primary center-block" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+</odoo>
