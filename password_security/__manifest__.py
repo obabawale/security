@@ -2,15 +2,15 @@
 # Copyright 2015 LasLabs Inc.
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 {
+
     'name': 'Password Security',
     "summary": "Allow admin to set password security requirements.",
-    'version': '10.0.1.0.2',
+    'version': '10.0.1.1.4',
     'author': "LasLabs, Odoo Community Association (OCA)",
     'category': 'Base',
     'depends': [
         'auth_crypt',
         'auth_signup',
-        'limit_login_attempts',
     ],
     "website": "https://laslabs.com",
     "license": "LGPL-3",

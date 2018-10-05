@@ -9,8 +9,7 @@ from odoo.http import request
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.addons.web.controllers.main import ensure_db, Session
 
-from odoo.addons.password_security.exceptions import PassError
-from odoo.addons.limit_login_attempts.controllers.block import HomeInherit
+from ..exceptions import PassError
 
 
 class PasswordSecuritySession(Session):
@@ -32,6 +31,29 @@ class PasswordSecurityHome(AuthSignupHome):
         user_id = request.env.user
         user_id._check_password(password)
         return super(PasswordSecurityHome, self).do_signup(qcontext)
+
+    @http.route()
+    def web_login(self, *args, **kw):
+        ensure_db()
+        response = super(PasswordSecurityHome, self).web_login(*args, **kw)
+        login_success = request.params.get('login_success', False)
+        if not request.httprequest.method == 'POST' or not login_success:
+            return response
+        uid = request.session.authenticate(
+            request.session.db,
+            request.params['login'],
+            request.params['password']
+        )
+        if not uid:
+            return response
+        users_obj = request.env['res.users'].sudo()
+        user_id = users_obj.browse(request.uid)
+        if not user_id._password_has_expired():
+            return response
+        user_id.action_expire_password()
+        request.session.logout(keep_db=True)
+        redirect = user_id.partner_id.signup_url
+        return http.redirect_with_hash(redirect)
 
     @http.route()
     def web_auth_signup(self, *args, **kw):
@@ -71,19 +93,3 @@ class PasswordSecurityHome(AuthSignupHome):
         return super(PasswordSecurityHome, self).web_auth_reset_password(
             *args, **kw
         )
-
-
-class PasswordSecurityLogin(HomeInherit):
-
-    @http.route()
-    def web_login(self, *args, **kw):
-        ensure_db()
-        response = super(PasswordSecurityLogin, self).web_login(*args, **kw)
-        users_obj = request.env['res.users'].sudo()
-        user_id = users_obj.browse(request.uid)
-        if not user_id._password_has_expired():
-            user_id.action_expire_password()
-            request.session.logout(keep_db=True)
-            redirect = user_id.partner_id.signup_url
-            return http.redirect_with_hash(redirect)
-        return response

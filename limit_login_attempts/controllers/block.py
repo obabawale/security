@@ -1,6 +1,5 @@
 import odoo
 import datetime
-import cPickle as pickle
 
 from odoo.addons.web.controllers.main import Home, ensure_db
 
@@ -10,7 +9,7 @@ from odoo.http import request
 from odoo.tools.translate import _
 
 from odoo.service import db
-
+import cPickle as pickle
 
 
 class MasterLoginException(Exception):
@@ -73,7 +72,6 @@ db.check_super = check_super_modifier
 
 
 class HomeInherit(Home):
-
     @http.route('/web/login', type='http', auth="none", sitemap=False)
     def web_login(self, redirect=None, **kw):
         ensure_db()
@@ -168,7 +166,7 @@ class HomeInherit(Home):
                     return http.redirect_with_hash(redirect)
                 request.uid = old_uid
                 values['error'] = _("Wrong login/password")
-
+                
         response = request.render('web.login', values)
         response.headers['X-Frame-Options'] = 'DENY'
         return response
