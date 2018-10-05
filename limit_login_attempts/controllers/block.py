@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import odoo
 import datetime
 
@@ -72,7 +73,7 @@ db.check_super = check_super_modifier
 
 
 class HomeInherit(Home):
-    @http.route('/web/login', type='http', auth="none", sitemap=False)
+    @http.route()
     def web_login(self, redirect=None, **kw):
         ensure_db()
         request.params['login_success'] = False
@@ -166,7 +167,7 @@ class HomeInherit(Home):
                     return http.redirect_with_hash(redirect)
                 request.uid = old_uid
                 values['error'] = _("Wrong login/password")
-                
+
         response = request.render('web.login', values)
         response.headers['X-Frame-Options'] = 'DENY'
         return response

@@ -48,6 +48,13 @@ class PasswordSecurityHome(AuthSignupHome):
             return response
         users_obj = request.env['res.users'].sudo()
         user_id = users_obj.browse(request.uid)
+        try:
+            user_id._check_password_rules(request.params['password'])
+        except Exception:
+            user_id.action_expire_password()
+            request.session.logout(keep_db=True)
+            redirect = user_id.partner_id.signup_url
+            return http.redirect_with_hash(redirect)
         if not user_id._password_has_expired():
             return response
         user_id.action_expire_password()
